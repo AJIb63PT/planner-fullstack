@@ -22,10 +22,11 @@ model User {
   name     String?
   password String
 
-  workInterval  Int    @default(50)
-  breakInterval Int    @default(20)
-  countInterval Int    @default(10)
+  workInterval  Int         @default(50)
+  breakInterval Int         @default(20)
+  countInterval Int         @default(10)
   tasks         Task[]
+  timeBlocks    TimeBlock[]
 
   @@map("user")
 }
@@ -43,6 +44,22 @@ model Task {
   userId String @map("user_id")
 
   @@map("task")
+}
+
+model TimeBlock {
+  id       String   @id @default(cuid())
+  createAt DateTime @default(now()) @map("create_at")
+  updateAt DateTime @updatedAt() @map("update_at")
+
+  name     String  @unique
+  color    String?
+  duration Int
+  order    Int     @default(1)
+
+  user   User   @relation(fields: [userId], references: [id])
+  userId String @map("user_id")
+
+  @@map("time_block")
 }
 
 enum Priority {
