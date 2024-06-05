@@ -22,11 +22,13 @@ model User {
   name     String?
   password String
 
-  workInterval  Int         @default(50)
-  breakInterval Int         @default(20)
-  countInterval Int         @default(10)
-  tasks         Task[]
-  timeBlocks    TimeBlock[]
+  workInterval  Int @default(50)
+  breakInterval Int @default(20)
+  countInterval Int @default(10)
+
+  tasks      Task[]
+  timeBlocks TimeBlock[]
+  rounds     PomodoroSession[]
 
   @@map("user")
 }
@@ -60,6 +62,34 @@ model TimeBlock {
   userId String @map("user_id")
 
   @@map("time_block")
+}
+
+model PomodoroSession {
+  id       String   @id @default(cuid())
+  createAt DateTime @default(now()) @map("create_at")
+  updateAt DateTime @updatedAt() @map("update_at")
+
+  isDone Boolean? @default(false) @map("is_done")
+
+  user   User   @relation(fields: [userId], references: [id])
+  userId String @map("user_id")
+
+  rounds PomodoroRound[]
+
+  @@map("pomodoro_session")
+}
+
+model PomodoroRound {
+  id       String   @id @default(cuid())
+  createAt DateTime @default(now()) @map("create_at")
+  updateAt DateTime @updatedAt() @map("update_at")
+
+  isDone            Boolean?        @default(false) @map("is_done")
+  totalSeconds      Int
+  pomodoroSession   PomodoroSession @relation(fields: [pomodoroSessionId], references: [id], onDelete: Cascade)
+  pomodoroSessionId String          @map("pomodoro_session_id")
+
+  @@map("pomodoro_round")
 }
 
 enum Priority {
