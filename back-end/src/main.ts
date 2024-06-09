@@ -8,7 +8,7 @@ async function bootstrap() {
   app.use(cp());
   app.enableCors({
     credentials: true,
-    origin: ['http://localhost:3001'],
+    origin: ['http://localhost:3000'],
     exposedHeaders: 'set-cookie',
   });
 
