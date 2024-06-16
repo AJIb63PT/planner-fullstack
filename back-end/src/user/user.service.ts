@@ -30,6 +30,8 @@ export class UserService {
     const profile = await this.getById(id);
 
     const totalTasks = profile.tasks.length;
+
+    // todo move on taskServices
     const completedTasks = await this.prisma.task.count({
       where: {
         userId: id,
@@ -40,6 +42,7 @@ export class UserService {
     const todayStart = startOfDay(new Date());
     const weekStart = startOfDay(subDays(new Date(), 7));
 
+    // todo move on taskServices
     const todayTasks = await this.prisma.task.count({
       where: {
         userId: id,
@@ -49,6 +52,7 @@ export class UserService {
       },
     });
 
+    // todo move on taskServices
     const weekTasks = await this.prisma.task.count({
       where: {
         userId: id,
